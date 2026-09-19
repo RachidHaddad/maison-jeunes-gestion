@@ -1,0 +1,340 @@
+import { useState } from 'react';
+
+const activities = [
+  {
+    title: 'Atelier sciences expérimentales',
+    date: '12 septembre 2026',
+    time: '10:00 - 12:00',
+    location: 'Laboratoire jeune science',
+    seats: 18,
+    filled: 14,
+    points: 25,
+    tag: 'Science',
+  },
+  {
+    title: 'Sortie nature & observation',
+    date: '18 septembre 2026',
+    time: '09:30 - 13:00',
+    location: 'Parc botanique',
+    seats: 24,
+    filled: 19,
+    points: 30,
+    tag: 'Nature',
+  },
+  {
+    title: 'Aide à la médiation citoyenne',
+    date: '22 septembre 2026',
+    time: '14:00 - 17:00',
+    location: 'Maison des jeunes',
+    seats: 16,
+    filled: 12,
+    points: 20,
+    tag: 'Citoyenneté',
+  },
+];
+
+const volunteers = [
+  { name: 'Lina M.', initials: 'LM', status: 'Présent', points: 180 },
+  { name: 'Yassine K.', initials: 'YK', status: 'Validé', points: 240 },
+  { name: 'Leila T.', initials: 'LT', status: 'À valider', points: 132 },
+  { name: 'Nadia S.', initials: 'NS', status: 'Présent', points: 210 },
+];
+
+const notifications = [
+  'Nouvelle activité scientifique ajoutée pour le week-end.',
+  'Deux nouveaux bénévoles ont confirmé leur participation.',
+  'Les points de contribution de la semaine ont été validés.',
+];
+
+const roleCards = {
+  volontaire: {
+    title: 'Tableau de bord volontaire',
+    summary: [
+      { label: 'Activités inscrites', value: '04' },
+      { label: 'Points acquis', value: '286' },
+      { label: 'Présences validées', value: '12' },
+    ],
+    list: [
+      ['Atelier robotique', 'Validé', '+25 points'],
+      ['Médiation jeunesse', 'Confirmé', '+20 points'],
+      ['Visite scientifique', 'En attente', '+15 points'],
+    ],
+  },
+  gestionnaire: {
+    title: 'Gestionnaire / professeur',
+    summary: [
+      { label: 'Groupes suivis', value: '08' },
+      { label: 'Matières actives', value: '05' },
+      { label: 'Points attribués', value: '1320' },
+    ],
+    list: [
+      ['Équipe A', '12 participants', 'Atelier code'],
+      ['Équipe B', '09 participants', 'Expérience chimie'],
+      ['Équipe C', '15 participants', 'Médiation'],
+    ],
+  },
+  admin: {
+    title: 'Administration centrale',
+    summary: [
+      { label: 'Comptes actifs', value: '312' },
+      { label: 'Centres gérés', value: '07' },
+      { label: 'Taux de participation', value: '84%' },
+    ],
+    list: [
+      ['Nouveaux inscrits', '24 ce mois', 'À valider'],
+      ['Activités planifiées', '42', 'Selon calendrier'],
+      ['Incidents signalés', '03', 'Traités'],
+    ],
+  },
+};
+
+export default function App() {
+  const [selectedRole, setSelectedRole] = useState('volontaire');
+
+  const activeRole = roleCards[selectedRole];
+
+  return (
+    <div className="page-shell">
+      <header className="topbar">
+        <div className="brand-wrap">
+          <div className="brand-mark">M</div>
+          <div>
+            <p className="brand-title">Maison des Jeunes</p>
+            <span className="brand-subtitle">Centre de loisirs scientifique</span>
+          </div>
+        </div>
+
+        <nav className="main-nav" aria-label="Navigation principale">
+          <a href="#accueil">Accueil</a>
+          <a href="#activites">Activités</a>
+          <a href="#tableau-de-bord">Tableau de bord</a>
+          <a href="#contact">Contact</a>
+        </nav>
+
+        <button className="primary-button">Se connecter</button>
+      </header>
+
+      <main>
+        <section className="hero" id="accueil">
+          <div className="hero-copy">
+            <span className="eyebrow">Engagement • Découverte • Contribution</span>
+            <h1>Une plateforme moderne pour accompagner les jeunes dans leurs activités.</h1>
+            <p>
+              Gérez les inscriptions, les présences, les points de contribution et les parcours
+              d’engagement dans les maisons de jeunes et centres scientifiques.
+            </p>
+            <div className="hero-actions">
+              <button className="primary-button">Créer un compte volontaire</button>
+              <button className="secondary-button">Voir les activités</button>
+            </div>
+            <div className="hero-badges">
+              <span>Volontaires</span>
+              <span>Gérants</span>
+              <span>Administrateurs</span>
+            </div>
+          </div>
+
+          <div className="hero-panel">
+            <div className="panel-card summary-card">
+              <p className="panel-label">Participation du mois</p>
+              <h2>84%</h2>
+              <div className="mini-bars" aria-hidden="true">
+                <span />
+                <span />
+                <span />
+                <span />
+                <span />
+              </div>
+            </div>
+            <div className="panel-card mini-card">
+              <p className="panel-label">Points moyens</p>
+              <h3>248 pts</h3>
+              <small>+18% vs. le mois précédent</small>
+            </div>
+          </div>
+        </section>
+
+        <section className="feature-strip">
+          <div>
+            <strong>315</strong>
+            <span>jeunes engagés</span>
+          </div>
+          <div>
+            <strong>42</strong>
+            <span>activités organisées</span>
+          </div>
+          <div>
+            <strong>07</strong>
+            <span>centres actifs</span>
+          </div>
+          <div>
+            <strong>96%</strong>
+            <span>satisfaction</span>
+          </div>
+        </section>
+
+        <section className="features" aria-label="Fonctionnalités">
+          <div className="section-heading">
+            <span className="eyebrow">Ce que propose la plateforme</span>
+            <h2>Une gestion claire pour chaque profil</h2>
+          </div>
+
+          <div className="feature-grid">
+            <article className="info-card">
+              <div className="icon">👥</div>
+              <h3>Inscription volontaire</h3>
+              <p>Les jeunes peuvent créer leur compte, compléter leur profil et s’inscrire aux activités disponibles.</p>
+            </article>
+            <article className="info-card">
+              <div className="icon">📚</div>
+              <h3>Suivi des activités</h3>
+              <p>Chaque activité dispose d’un calendrier, d’une capacité, d’un lieu et des informations nécessaires.</p>
+            </article>
+            <article className="info-card">
+              <div className="icon">✅</div>
+              <h3>Validation des présences</h3>
+              <p>Les gérants valident les présences et les participants reçoivent leur contribution en points.</p>
+            </article>
+            <article className="info-card">
+              <div className="icon">🏆</div>
+              <h3>Points de contribution</h3>
+              <p>Le système attribue des points selon les activités, leur durée et la qualité de l’engagement.</p>
+            </article>
+          </div>
+        </section>
+
+        <section className="activities" id="activites">
+          <div className="section-heading split-heading">
+            <div>
+              <span className="eyebrow">Activités prévues</span>
+              <h2>Des programmes inspirants et structurés</h2>
+            </div>
+            <button className="secondary-button">Toutes les activités</button>
+          </div>
+
+          <div className="activity-grid">
+            {activities.map((activity) => (
+              <article className="activity-card" key={activity.title}>
+                <div className="activity-topline">
+                  <span className="tag">{activity.tag}</span>
+                  <span className="points">{activity.points} pts</span>
+                </div>
+                <h3>{activity.title}</h3>
+                <ul>
+                  <li>{activity.date}</li>
+                  <li>{activity.time}</li>
+                  <li>{activity.location}</li>
+                </ul>
+                <div className="capacity-row">
+                  <span>
+                    {activity.filled}/{activity.seats} participants
+                  </span>
+                  <button className="tiny-button">S’inscrire</button>
+                </div>
+              </article>
+            ))}
+          </div>
+        </section>
+
+        <section className="dashboard" id="tableau-de-bord">
+          <div className="section-heading">
+            <span className="eyebrow">Rôles intégrés</span>
+            <h2>Un espace de travail adapté à chaque profil</h2>
+          </div>
+
+          <div className="role-switcher" aria-label="Sélection du rôle">
+            <button
+              className={selectedRole === 'volontaire' ? 'role-button active' : 'role-button'}
+              onClick={() => setSelectedRole('volontaire')}
+            >
+              Volontaire
+            </button>
+            <button
+              className={selectedRole === 'gestionnaire' ? 'role-button active' : 'role-button'}
+              onClick={() => setSelectedRole('gestionnaire')}
+            >
+              Gestionnaire
+            </button>
+            <button
+              className={selectedRole === 'admin' ? 'role-button active' : 'role-button'}
+              onClick={() => setSelectedRole('admin')}
+            >
+              Administrateur
+            </button>
+          </div>
+
+          <div className="dashboard-panel">
+            <div className="dashboard-header">
+              <h3>{activeRole.title}</h3>
+              <button className="primary-button small">Voir détails</button>
+            </div>
+
+            <div className="summary-grid">
+              {activeRole.summary.map((item) => (
+                <div className="summary-box" key={item.label}>
+                  <span>{item.label}</span>
+                  <strong>{item.value}</strong>
+                </div>
+              ))}
+            </div>
+
+            <div className="dashboard-content">
+              <div className="panel-list">
+                <h4>État du suivi</h4>
+                {activeRole.list.map((item, index) => (
+                  <div className="list-row" key={`${item[0]}-${index}`}>
+                    <span>{item[0]}</span>
+                    <span>{item[1]}</span>
+                    <span>{item[2]}</span>
+                  </div>
+                ))}
+              </div>
+
+              <div className="leaderboard">
+                <h4>Participants actifs</h4>
+                {volunteers.map((person) => (
+                  <div className="user-row" key={person.name}>
+                    <div className="avatar">{person.initials}</div>
+                    <div>
+                      <strong>{person.name}</strong>
+                      <small>{person.status}</small>
+                    </div>
+                    <span>{person.points} pts</span>
+                  </div>
+                ))}
+              </div>
+            </div>
+          </div>
+        </section>
+
+        <section className="notifications" aria-label="Notifications">
+          <div className="section-heading">
+            <span className="eyebrow">Actualités</span>
+            <h2>Suivi de l’activité récente</h2>
+          </div>
+
+          <div className="notification-list">
+            {notifications.map((item) => (
+              <div className="notify-item" key={item}>
+                <span className="dot" aria-hidden="true" />
+                <p>{item}</p>
+              </div>
+            ))}
+          </div>
+        </section>
+      </main>
+
+      <footer className="footer" id="contact">
+        <div>
+          <p className="brand-title">Maison des Jeunes</p>
+          <span className="brand-subtitle">Centre de loisirs scientifique</span>
+        </div>
+        <div className="footer-links">
+          <a href="#accueil">Accueil</a>
+          <a href="#activites">Activités</a>
+          <a href="#tableau-de-bord">Tableau de bord</a>
+        </div>
+      </footer>
+    </div>
+  );
+}
